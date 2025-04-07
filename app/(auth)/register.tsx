@@ -2,11 +2,11 @@ import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 
-import Button from '../../components/Button';
-import Input from '../../components/Input';
-import Layout from '../../components/Layout';
-import { useAuth } from '../../contexts/AuthContext';
-import { register } from '../../services/authService';
+import Button from '../components/Button';
+import Input from '../components/Input';
+import Layout from '../components/Layout';
+import { useAuth } from '../contexts/AuthContext';
+import { register } from '../services/authService';
 
 function Register() {
   const [email, setEmail] = useState('');
