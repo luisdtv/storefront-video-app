@@ -1,47 +1,38 @@
-import { View, Text } from 'react-native';
-import React, { useState, useContext } from 'react';
 import { useRouter } from 'expo-router';
-import Layout from '../../components/Layout';
-import Input from '../../components/Input';
+import React, { useState } from 'react';
+import { Text, View } from 'react-native';
+
 import Button from '../../components/Button';
+import Input from '../../components/Input';
+import Layout from '../../components/Layout';
+import { useAuth } from '../../contexts/AuthContext';
 import { register } from '../../services/authService';
 
-const RegisterScreen = () => {
-  const { setUser } = useContext(AuthContext);
+function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
+  const { setUser } = useAuth();
 
-  const handleRegister = () => {
-    console.log('Email:', email);
-    register(email, password).then(res => {
-      if(res){
-        setUser({email: email})
-        console.log('success')
-      }else{
-        console.error('error')
-      }
-    })
-  };
+  async function handleRegister() {
+    const user = await register(email, password);
+    if (user) {
+      setUser(user);
+      console.log('success');
+      router.replace('/(main)');
+    } else {
+      console.log('error');
+    }
+  }
 
   return (
-    <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
-      <Text style={{ fontSize: 24, marginBottom: 20 }}>Register</Text>
-      <Input
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        style={{ marginBottom: 10, width: '100%' }}
-      />
-      <Input
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={{ marginBottom: 20, width: '100%' }}
-      />
-      <Button title="Register" onPress={handleRegister} />
+    <Layout>
+      <Text>Register</Text>
+      <Input placeholder="email" value={email} onChangeText={setEmail} />
+      <Input placeholder="password" value={password} onChangeText={setPassword} secureTextEntry />
+      <Button onPress={handleRegister} text="Register" />
     </Layout>
   );
-};
+}
 
-export default RegisterScreen;
+export default Register;

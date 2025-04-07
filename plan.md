@@ -42,12 +42,15 @@ Build the user login and registration functionality.
     *   `app/(auth)/login.tsx`: Login form UI, state management (`useState`), `handleLogin` function.
     *   `app/(auth)/register.tsx`: Registration form UI, state management, `handleRegister` function.
 2.  **Navigation:** Implemented navigation between login and register screens using `expo-router`.
-3.  **Service Integration (Mock):**
-    *   Connected `handleLogin` and `handleRegister` to mock functions in `authService.ts`.
+3.  **Service Integration (Supabase):**
+    *   Connected `handleLogin` and `handleRegister` to  functions in `authService.ts`.
 4.  **Context Integration:**
     *   Updated `AuthContext` to hold user state and loading status.
-    *   Connected `login.tsx` and `register.tsx` to update `AuthContext` (`setUser`) upon successful mock authentication.
+    *   Connected `login.tsx` and `register.tsx` to update `AuthContext` (`setUser`) upon successful authentication.
     *   Configured root `_layout.tsx` to redirect based on `AuthContext`'s user state.
+5. **Handle User Data:**
+    * Updated `authService.ts`: updated the register and login function to return the user data.
+    * Updated `AuthContext.tsx`: Updated the AuthContext to store the user data.
 
 ## Phase 4: Backend Integration (Supabase)
 

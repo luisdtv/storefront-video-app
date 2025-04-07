@@ -1,75 +1,40 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { useRouter } from 'expo-router';
-import { useState, useContext } from "react";
-import { router } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { Text, View } from 'react-native';
 
-import Layout from "../components/Layout";
-import Input from "../components/Input";
-import Button from "../components/Button";
-import { login } from "../services/authService";
-import { AuthContext } from "../contexts/AuthContext";
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import Layout from '../../components/Layout';
+import { useAuth } from '../../contexts/AuthContext';
+import { login } from '../../services/authService';
 
-export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { setUser } = useContext(AuthContext);
+function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter();
+  const { setUser } = useAuth();
 
-  const handleLogin = async () => {
-    const response = await login(email, password);
-    if (response) {
-      setUser({ email: email });
-      router.push("/(main)");
+  async function handleLogin() {
+    const user = await login(email, password);
+    if (user) {
+      setUser(user);
+      router.replace('/(main)');
     } else {
-      console.log("Login failed");
+      console.log('error');
     }
-  };
-
-  const handleNavigateToRegister = () => {
-    router.push('/(auth)/register');
-  };
-
+  }
 
   return (
-    <Layout style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <View style={styles.form}>
-        <Input
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-        />
-        <Input placeholder="Password" value={password}
-          onChangeText={setPassword}
-        />
-        <Button text="Login" onPress={handleLogin} />
-        <TouchableOpacity onPress={handleNavigateToRegister}>
-          <Text style={styles.registerText}>
-            Register here 
-          </Text>
-        </TouchableOpacity>
-      </View>
+    <Layout>
+      <Text>Login</Text>
+      <Input placeholder="email" value={email} onChangeText={setEmail} />
+      <Input placeholder="password" value={password} onChangeText={setPassword} secureTextEntry />
+      <Button onPress={handleLogin} text="Login" />
+      <Text onPress={() => router.push('/register')}>
+        register here
+      </Text>
     </Layout>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-},
-  form: {
-    width: "100%",
-    gap: 10,
-},
-  registerText: {
-    textAlign: "center",
-    marginTop: 10,
-  },
-});
+export default Login;

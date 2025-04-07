@@ -1,30 +1,27 @@
-import React, { createContext, useState, ReactNode, Dispatch, SetStateAction } from 'react';
-import { User } from '../models/model';
+import React, { createContext, useState, useContext } from 'react';
+import { User as SupabaseUser } from '@supabase/supabase-js';
+
+interface User extends SupabaseUser {
+  email?: string | null; // Make email optional to align with Supabase's User type
+}
 
 interface AuthContextProps {
   user: User | null;
-  setUser: Dispatch<SetStateAction<User | null>>;
+  setUser: (user: User | null) => void;
   isLoading: boolean;
 }
 
-const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
+const AuthContext = createContext<AuthContextProps>({
+  user: null,
+  setUser: () => {},
+  isLoading: false,
+});
 
-interface AuthContextProviderProps {
-  children: ReactNode;
-}
-
-const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ children }) => {
+export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  // Example functions, replace with actual logic
-  // const login = (userData: User) => {
-  //   setUser(userData);
-  // };
-
-  // const logout = () => {
-  //   setUser(null);
-  // };
 
   return (
     <AuthContext.Provider value={{ user, setUser, isLoading }}>
@@ -33,4 +30,4 @@ const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ children }) =
   );
 };
 
-export { AuthContext, AuthContextProvider};
+export const useAuth = () => useContext(AuthContext);
