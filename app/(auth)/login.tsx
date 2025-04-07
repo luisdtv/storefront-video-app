@@ -1,4 +1,4 @@
-import { Stack, useRouter } from 'expo-router';
+import { useRouter, Link } from 'expo-router';
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 
@@ -30,9 +30,11 @@ function Login() {
       <Input placeholder="email" value={email} onChangeText={setEmail} />
       <Input placeholder="password" value={password} onChangeText={setPassword} secureTextEntry />
       <Button onPress={handleLogin} text="Login" />
-      <Text onPress={() => router.push('/register')}>
+      <Link href="/register" asChild>
+      <Text >
         register here
       </Text>
+      </Link>
     </Layout>
   );
 }
